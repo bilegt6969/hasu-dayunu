@@ -13,12 +13,14 @@ import "keen-slider/keen-slider.min.css";
 import { useParams } from 'next/navigation';
 import Project_data from "../data";
 
-
-
 function Page() {
   const { id } = useParams(); // Accessing the dynamic route parameter
 
-  const item_1 = Project_data.find(item => item.id === id)
+  const item_1 = Project_data.find(item => item.id === id);
+
+  if (!item_1) {
+    return <div className="text-center text-red-600">Project not found</div>; // Handle case where item_1 is undefined
+  }
 
   const [opacities, setOpacities] = React.useState<number[]>([]);
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
@@ -120,11 +122,11 @@ function Page() {
 
       <section className="mx-auto mt-2">
         <div className="bg-white rounded-2xl p-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4  hover:text-blue-500">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 hover:text-blue-500">
             {Project_data.map((item) => (
               <div
                 key={item.id}
-                className="relative  hover:text-blue-500 group w-full h-0 pb-[90%] overflow-hidden border-[2vh] rounded-3xl border-[#F5F5F5] lalar "
+                className="relative hover:text-blue-500 group w-full h-0 pb-[90%] overflow-hidden border-[2vh] rounded-3xl border-[#F5F5F5]"
               >
                 {/* Image */}
                 <Image
@@ -132,42 +134,32 @@ function Page() {
                   alt={item.alt}
                   layout="fill" // Use fill to cover the square area
                   objectFit="cover" // Cover the area while maintaining aspect ratio
-                  className="transition-transform duration-300 group-hover:scale-105 ring-4 " // Updated line
+                  className="transition-transform duration-300 group-hover:scale-105 ring-4" // Updated line
                 />
 
                 {/* Overlay Text and Icon */}
                 <div className="absolute inset-0 flex flex-col justify-between p-0 rounded-xl">
                   <div className="flex items-center justify-end ">
-                    <div className="bevel12"></div>
-                    <div className="bevel13"></div>
-                    <div className="bg-[#F5F5F5]  pl-3 pb-3 rounded-bl-2xl">
-                      <div className="bg-[#f5f5f5] group-hover:bg-blue-800 transition-colors duration-250 group-hover:border-blue-800  p-1 rounded-full border-gray-300 border-1">
-                        <ArrowUpRight className="h-5 w-5 text-gray-300 group-hover:text-white " />
+                    <div className="bg-[#F5F5F5] pl-3 pb-3 rounded-bl-2xl">
+                      <div className="bg-[#f5f5f5] group-hover:bg-blue-800 transition-colors duration-250 group-hover:border-blue-800 p-1 rounded-full border-gray-300 border-1">
+                        <ArrowUpRight className="h-5 w-5 text-gray-300 group-hover:text-white" />
                       </div>
                     </div>
                   </div>
                   
                   <div className="relative flex">
-                  <div className="flex-col w-full">
-                  <div className="bevel15"></div>
-                  <div className="flex items-end">
-                  <div className="bg-[#f5f5f5] w-4/6 rounded-tr-2xl flex p-2 pb-0 pl-0">
-                  <p className=" text-gray-800 font-semibold ">
-                      {item.company}
-                      <br />
-                      {item.title}
-                    </p>
+                    <div className="flex-col w-full">
+                      <div className="flex items-end">
+                        <div className="bg-[#f5f5f5] w-4/6 rounded-tr-2xl flex p-2 pb-0 pl-0">
+                          <p className="text-gray-800 font-semibold">
+                            {item.company}
+                            <br />
+                            {item.title}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bevel14"></div>
-                  </div>
-                  </div>
-
-                  
-                    
-
-
-                  </div>
-
                 </div>
               </div>
             ))}
